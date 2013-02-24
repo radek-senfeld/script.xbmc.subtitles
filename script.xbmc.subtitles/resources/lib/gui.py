@@ -59,6 +59,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
     self.language_3      = languageTranslate(__addon__.getSetting( "Lang03" ), 4, 0)     # Full language 3
     self.tmp_sub_dir     = os.path.join( __profile__ ,"sub_tmp" )                        # Temporary subtitle extraction directory   
     self.stream_sub_dir  = os.path.join( __profile__ ,"sub_stream" )                     # Stream subtitle directory    
+    self.recode_utf8     = __addon__.getSetting( "recode_utf8" )                         # Convert to UTF-8
     
     self.clean_temp()                                                                   # clean temp dirs
     
@@ -326,6 +327,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
       # Choose the last pair in the list, second item (destination file)
       if subtitle_set:
         subtitle = files_list[-1][1]
+        if self.recode_utf8:
+          recode_to_utf8(subtitle, sub_lang)
         xbmc.Player().setSubtitles(subtitle.encode("utf-8"))
         self.close()
       else:
@@ -387,6 +390,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
             subtitle_set,subToActivate  = copy_files( subtitle_file, file_path )
 
     if subtitle_set :
+      if self.recode_utf8:
+        recode_to_utf8(subToActivate, subtitle_lang)
       xbmc.Player().setSubtitles(subToActivate.encode("utf-8"))
       self.close()
     else:

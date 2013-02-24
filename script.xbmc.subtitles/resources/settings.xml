@@ -91,5 +91,6 @@
       <setting id="pause" type="bool" label="30160" default="true" />
       <setting id="auto_download" type="bool" label="30131" default="false" />
       <setting id="auto_download_file" visible= "false" type="text" label="" default="" />
+      <setting id="recode_utf8" type="bool" label="Convert to UTF-8" default="false" />
     </category>
 </settings>

@@ -299,6 +299,38 @@ def getShowId():
       return json.loads(xbmc.executeJSONRPC (tvdbid_query))['result']['tvshowdetails']['imdbnumber']
     except:
       log( __name__ ," Failed to find TVDBid in database")  
-    
 
+# Inspired by http://gomputor.wordpress.com/2008/09/22/convert-a-file-in-utf-8-or-any-encoding-with-python/
+def recode_to_utf8(file_path, lang):
+    encodings = {
+	"cs": ("windows-1250", "iso-8859-2"),
+	"el": ("windows-1253", "iso-8859-7", "macgreek"),
+    }
 
+    if lang not in encodings.keys():
+	return
+
+    # read file contents
+    try:
+	f = xbmcvfs.File(file_path)
+	data = f.read()
+	f.close()
+    except:
+	return
+
+    # decode file contents
+    for enc in encodings[lang]:
+	try:
+	    data = data.decode(enc)
+	    break
+	except:
+	    if enc == encodings[lang][-1]:
+		return
+	    continue
+
+    # write recoded subtitles
+    f = xbmcvfs.File(file_path, "w")
+    try:
+	f.write(data.encode("utf-8"))
+    finally:
+	f.close()
